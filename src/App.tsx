@@ -15,9 +15,9 @@ function Navigation() {
   ];
 
   return (
-    <nav style={{ width: '250px', backgroundColor: 'var(--bg-surface)', borderRight: '1px solid var(--border)', padding: '2rem 1rem' }}>
-      <h2 style={{ marginBottom: '2rem', paddingLeft: '1rem', color: 'var(--primary)' }}>Tómbola Pro</h2>
-      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+    <nav className="sidebar">
+      <h2 className="brand-title">Tómbola Pro</h2>
+      <ul className="nav-list">
         {navItems.map(item => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -25,21 +25,10 @@ function Navigation() {
             <li key={item.path}>
               <Link 
                 to={item.path}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.75rem 1rem',
-                  borderRadius: 'var(--border-radius)',
-                  textDecoration: 'none',
-                  color: isActive ? '#000' : 'var(--text-primary)',
-                  backgroundColor: isActive ? 'var(--primary)' : 'transparent',
-                  fontWeight: isActive ? 600 : 400,
-                  transition: 'all 0.2s'
-                }}
+                className={`nav-item ${isActive ? 'active' : ''}`}
               >
                 <Icon size={20} />
-                {item.label}
+                <span>{item.label}</span>
               </Link>
             </li>
           );
