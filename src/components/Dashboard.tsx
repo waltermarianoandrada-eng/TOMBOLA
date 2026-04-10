@@ -21,8 +21,8 @@ export default function Dashboard() {
   if (!config) {
     return (
       <div className="empty-state">
-        <h2>No Raffle Configured</h2>
-        <p style={{ marginTop: '1rem', marginBottom: '2rem' }}>Please go to the Config section to setup your raffle first.</p>
+        <h2>Rifa No Configurada</h2>
+        <p style={{ marginTop: '1rem', marginBottom: '2rem' }}>Por favor dirígete a la sección de Configuración para iniciar tu rifa primero.</p>
       </div>
     );
   }
@@ -32,22 +32,27 @@ export default function Dashboard() {
   return (
     <div>
       <div className="header">
-        <h1>{config.name} - Dashboard</h1>
+        <div>
+          <h1>{config.name} - Panel Principal</h1>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+            Valor del número: {config.pricePerNumber} {config.currency}
+          </p>
+        </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <span className="badge badge-available">Available: {counts.available}</span>
-          <span className="badge badge-sold">Sold: {counts.sold}</span>
-          <span className="badge badge-paid">Paid: {counts.paid}</span>
+          <span className="badge badge-available">Disponibles: {counts.available}</span>
+          <span className="badge badge-sold">Vendidos: {counts.sold}</span>
+          <span className="badge badge-paid">Pagados: {counts.paid}</span>
         </div>
       </div>
 
       <div className="card">
-        <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Numbers Grid</h2>
+        <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Cuadrícula de Números</h2>
         <div className="raffle-grid">
           {tickets.map(ticket => (
             <div 
               key={ticket.number}
               className={`raffle-number status-${ticket.status}`}
-              title={ticket.buyerId ? `Buyer: ${buyers[ticket.buyerId]?.name}` : 'Available'}
+              title={ticket.buyerId ? `Comprador: ${buyers[ticket.buyerId]?.name}` : 'Disponible'}
             >
               {ticket.number}
             </div>

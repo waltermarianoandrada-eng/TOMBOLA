@@ -9,8 +9,8 @@ export default function RaffleConfigView() {
   // Form state
   const [name, setName] = useState('');
   const [totalNumbers, setTotalNumbers] = useState(100);
-  const [pricePerNumber, setPricePerNumber] = useState(10);
-  const [currency, setCurrency] = useState('USD');
+  const [pricePerNumber, setPricePerNumber] = useState(1000);
+  const [currency, setCurrency] = useState('Pesos Argentinos');
 
   useEffect(() => {
     const loadedConfig = storage.getConfig();
@@ -26,8 +26,13 @@ export default function RaffleConfigView() {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (config) {
-      const confirmReset = window.confirm("Warning: Changing config may reset tickets if total numbers change in a way that is disruptive, though right now we strictly recommend not changing total numbers after sales. Proceed?");
+      const confirmReset = window.confirm("Advertencia: Al guardar esta nueva configuración, si cambiaste la cantidad total de números, la cuadrícula de boletos se reconstruirá y los boletos asignados podrían desvincularse. ¿Estás seguro de querer guardar los cambios?");
       if (!confirmReset) return;
+
+      // Si cambió el total de números, reiniciamos los boletos en la base de datos
+      if (totalNumbers !== config.totalNumbers) {
+        storage.setTickets([]);
+      }
     }
 
     const newConfig: RaffleConfig = {
@@ -40,11 +45,11 @@ export default function RaffleConfigView() {
     storage.setConfig(newConfig);
     engine.initializeTickets(totalNumbers);
     setConfig(newConfig);
-    alert('Configuration saved successfully!');
+    alert('¡Configuración guardada exitosamente!');
   };
 
   const handleReset = () => {
-    if (window.confirm("CRITICAL WARNING: This will delete ALL data (buyers, tickets, config, winners). Are you absolutely sure?")) {
+    if (window.confirm("ADVERTENCIA CRÍTICA: Esto borrará TODOS los datos (compradores, boletos, historia, ganadores). ¿Estás completamente seguro?")) {
       storage.clearAll();
       window.location.reload();
     }
@@ -53,13 +58,13 @@ export default function RaffleConfigView() {
   return (
     <div>
       <div className="header">
-        <h1>Raffle Configuration</h1>
+        <h1>Configuración de la Rifa</h1>
       </div>
 
       <div className="card" style={{ maxWidth: '600px' }}>
         <form onSubmit={handleSave}>
           <div className="input-group">
-            <label className="input-label">Raffle Name</label>
+            <label className="input-label">Nombre de la Rifa</label>
             <input 
               type="text" 
               className="input" 
@@ -71,7 +76,7 @@ export default function RaffleConfigView() {
 
           <div className="form-grid">
             <div className="input-group">
-              <label className="input-label">Total Numbers</label>
+              <label className="input-label">Total de Números</label>
               <input 
                 type="number" 
                 className="input" 
@@ -84,7 +89,7 @@ export default function RaffleConfigView() {
             </div>
 
             <div className="input-group">
-              <label className="input-label">Price Per Number</label>
+              <label className="input-label">Precio por Número</label>
               <input 
                 type="number" 
                 className="input" 
@@ -97,7 +102,7 @@ export default function RaffleConfigView() {
             </div>
             
             <div className="input-group">
-              <label className="input-label">Currency Symbol</label>
+              <label className="input-label">Moneda</label>
               <input 
                 type="text" 
                 className="input" 
@@ -109,9 +114,9 @@ export default function RaffleConfigView() {
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-            <button type="submit" className="btn btn-primary">Save Configuration</button>
+            <button type="submit" className="btn btn-primary">Guardar Configuración</button>
             <button type="button" className="btn" style={{ borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={handleReset}>
-              Danger: Reset All Data
+              Peligro: Borrar Todos los Datos
             </button>
           </div>
         </form>

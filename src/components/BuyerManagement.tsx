@@ -45,7 +45,7 @@ export default function BuyerManagement() {
     if (isNaN(num)) return;
 
     if (!selectedBuyerId) {
-      alert('Please select a buyer.');
+      alert('Por favor selecciona un comprador.');
       return;
     }
 
@@ -54,7 +54,7 @@ export default function BuyerManagement() {
       setTickets(storage.getTickets());
       setTicketNumber('');
     } else {
-      alert(`Ticket ${num} is not available or does not exist.`);
+      alert(`El boleto ${num} no está disponible o no existe.`);
     }
   };
 
@@ -66,39 +66,39 @@ export default function BuyerManagement() {
   return (
     <div>
       <div className="header">
-        <h1>Buyer Management</h1>
+        <h1>Gestión de Compradores</h1>
       </div>
 
       <div className="form-grid">
         {/* ADD BUYER */}
         <div className="card">
-          <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Add New Buyer</h2>
+          <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Añadir Nuevo Comprador</h2>
           <form onSubmit={handleAddBuyer}>
             <div className="input-group">
-              <label className="input-label">Name</label>
+              <label className="input-label">Nombre completo</label>
               <input type="text" className="input" value={name} onChange={e => setName(e.target.value)} required />
             </div>
             <div className="input-group">
-              <label className="input-label">Phone</label>
+              <label className="input-label">Teléfono</label>
               <input type="text" className="input" value={phone} onChange={e => setPhone(e.target.value)} required />
             </div>
-            <button type="submit" className="btn btn-primary" style={{ marginTop: '0.5rem' }}>Add Buyer</button>
+            <button type="submit" className="btn btn-primary" style={{ marginTop: '0.5rem' }}>Guardar Comprador</button>
           </form>
         </div>
 
         {/* ASSIGN TICKET */}
         <div className="card">
-          <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Assign Ticket</h2>
+          <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Asignar Boleto</h2>
           <form onSubmit={handleAssignTicket}>
             <div className="input-group">
-              <label className="input-label">Select Buyer</label>
+              <label className="input-label">Seleccionar Comprador</label>
               <select 
                 className="input" 
                 value={selectedBuyerId} 
                 onChange={e => setSelectedBuyerId(e.target.value)}
                 required
               >
-                <option value="">-- Choose Buyer --</option>
+                <option value="">-- Elegir Comprador --</option>
                 {Object.values(buyers).map(b => (
                   <option key={b.id} value={b.id}>{b.name} ({b.phone})</option>
                 ))}
@@ -107,55 +107,57 @@ export default function BuyerManagement() {
             
             <div className="form-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
               <div className="input-group">
-                <label className="input-label">Ticket No.</label>
+                <label className="input-label">Nº Boleto</label>
                 <input type="number" className="input" value={ticketNumber} onChange={e => setTicketNumber(e.target.value)} required />
               </div>
               
               <div className="input-group">
-                <label className="input-label">Status</label>
+                <label className="input-label">Estatus</label>
                 <select className="input" value={ticketStatus} onChange={e => setTicketStatus(e.target.value as 'sold'|'paid')}>
-                  <option value="sold">Sold (Unpaid)</option>
-                  <option value="paid">Paid</option>
+                  <option value="sold">Vendido (Adeuda)</option>
+                  <option value="paid">Pagado</option>
                 </select>
               </div>
             </div>
-            <button type="submit" className="btn btn-primary" style={{ marginTop: '0.5rem' }}>Assign</button>
+            <button type="submit" className="btn btn-primary" style={{ marginTop: '0.5rem' }}>Asignar</button>
           </form>
         </div>
       </div>
 
       {/* SOLD TICKETS LIST */}
       <div className="card" style={{ marginTop: '1.5rem' }}>
-        <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Ticket Ledger</h2>
+        <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Registro de Boletos</h2>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '0.75rem' }}>Ticket</th>
-                <th style={{ padding: '0.75rem' }}>Buyer</th>
-                <th style={{ padding: '0.75rem' }}>Status</th>
-                <th style={{ padding: '0.75rem' }}>Actions</th>
+                <th style={{ padding: '0.75rem' }}>Boleto</th>
+                <th style={{ padding: '0.75rem' }}>Comprador</th>
+                <th style={{ padding: '0.75rem' }}>Estatus</th>
+                <th style={{ padding: '0.75rem' }}>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {tickets.filter(t => t.status !== 'available').map(t => (
                 <tr key={t.number} style={{ borderBottom: '1px solid var(--border)' }}>
                   <td style={{ padding: '0.75rem', fontWeight: 600 }}>#{t.number}</td>
-                  <td style={{ padding: '0.75rem' }}>{t.buyerId ? buyers[t.buyerId]?.name : 'Unknown'}</td>
+                  <td style={{ padding: '0.75rem' }}>{t.buyerId ? buyers[t.buyerId]?.name : 'Desconocido'}</td>
                   <td style={{ padding: '0.75rem' }}>
-                    <span className={`badge badge-${t.status}`}>{t.status}</span>
+                    <span className={`badge badge-${t.status}`}>
+                      {t.status === 'sold' ? 'Vendido' : 'Pagado'}
+                    </span>
                   </td>
                   <td style={{ padding: '0.75rem', display: 'flex', gap: '0.5rem' }}>
                     {t.status === 'sold' && (
-                      <button className="btn btn-success" onClick={() => handleStatusChange(t.number, 'paid')}>Mark Paid</button>
+                      <button className="btn btn-success" onClick={() => handleStatusChange(t.number, 'paid')}>Marcar Pagado</button>
                     )}
-                    <button className="btn" style={{ borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => handleStatusChange(t.number, 'available')}>Free</button>
+                    <button className="btn" style={{ borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => handleStatusChange(t.number, 'available')}>Liberar</button>
                   </td>
                 </tr>
               ))}
               {tickets.filter(t => t.status !== 'available').length === 0 && (
                 <tr>
-                  <td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>No assigned tickets yet.</td>
+                  <td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>Aún no hay boletos vendidos.</td>
                 </tr>
               )}
             </tbody>

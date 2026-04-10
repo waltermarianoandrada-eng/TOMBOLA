@@ -9,15 +9,15 @@ import WinnerDraw from './components/WinnerDraw';
 function Navigation() {
   const location = useLocation();
   const navItems = [
-    { path: '/', label: 'Dashboard', icon: Ticket },
-    { path: '/buyers', label: 'Buyers', icon: Users },
-    { path: '/config', label: 'Config', icon: Settings },
-    { path: '/draw', label: 'Draw Winner', icon: Trophy },
+    { path: '/', label: 'Panel Principal', icon: Ticket },
+    { path: '/buyers', label: 'Compradores', icon: Users },
+    { path: '/config', label: 'Configuración', icon: Settings },
+    { path: '/draw', label: 'Gran Sorteo', icon: Trophy },
   ];
 
   return (
     <nav style={{ width: '250px', backgroundColor: 'var(--bg-surface)', borderRight: '1px solid var(--border)', padding: '2rem 1rem' }}>
-      <h2 style={{ marginBottom: '2rem', paddingLeft: '1rem', color: 'var(--primary)' }}>Tombola Pro</h2>
+      <h2 style={{ marginBottom: '2rem', paddingLeft: '1rem', color: 'var(--primary)' }}>Tómbola Pro</h2>
       <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {navItems.map(item => {
           const Icon = item.icon;

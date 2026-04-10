@@ -19,7 +19,7 @@ export default function WinnerDraw() {
   const handleDraw = () => {
     const counts = engine.getTicketStatusCounts();
     if (counts.paid === 0) {
-      alert("There are no valid 'paid' tickets to draw a winner from.");
+      alert("No hay boletos con estatus de 'Pagado' para sortear un ganador.");
       return;
     }
 
@@ -28,7 +28,7 @@ export default function WinnerDraw() {
 
     // Animation: randomly generate numbers for 3 seconds
     let interval: NodeJS.Timeout;
-    const duration = 3000;
+    const duration = 4000;
     const start = Date.now();
 
     interval = setInterval(() => {
@@ -54,15 +54,24 @@ export default function WinnerDraw() {
     }, 100);
   };
 
+  const handleClearHistory = () => {
+    if (window.confirm("¿Estás seguro de que quieres limpiar TODO el historial de ganadores? Esto no se puede deshacer.")) {
+      storage.setWinners([]);
+      setPastWinners([]);
+      setWinner(null);
+      setCurrentDisplay('?');
+    }
+  };
+
   return (
     <div>
       <div className="header">
-        <h1>Draw Winners</h1>
+        <h1>Sorteo Oficial</h1>
       </div>
 
       <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem', marginBottom: '2rem' }}>
         <Trophy size={64} color="var(--primary)" style={{ marginBottom: '1rem' }} />
-        <h2 style={{ marginBottom: '2rem' }}>The Grand Draw</h2>
+        <h2 style={{ marginBottom: '2rem' }}>El Gran Sorteo</h2>
         
         <div 
           style={{
@@ -83,11 +92,11 @@ export default function WinnerDraw() {
 
         {winner && !isDrawing && (
           <div style={{ animation: 'fadeIn 0.5s ease-in-out', marginBottom: '2rem' }}>
-            <h3 style={{ fontSize: '1.5rem', color: 'var(--success)' }}>We have a winner!</h3>
+            <h3 style={{ fontSize: '1.5rem', color: 'var(--success)' }}>¡Tenemos un ganador!</h3>
             <p style={{ fontSize: '1.25rem', marginTop: '0.5rem' }}>
-              Congratulations to <strong>{buyers[winner.buyerId]?.name}</strong>!
+              ¡Felicidades a <strong>{buyers[winner.buyerId]?.name}</strong>!
             </p>
-            <p style={{ color: 'var(--text-secondary)' }}>Phone: {buyers[winner.buyerId]?.phone}</p>
+            <p style={{ color: 'var(--text-secondary)' }}>Teléfono de contacto: {buyers[winner.buyerId]?.phone}</p>
           </div>
         )}
 
@@ -97,19 +106,31 @@ export default function WinnerDraw() {
           onClick={handleDraw}
           disabled={isDrawing}
         >
-          {isDrawing ? 'Drawing...' : 'DRAW NOW'}
+          {isDrawing ? 'Sorteando...' : 'SORTEAR AHORA'}
         </button>
       </div>
 
       <div className="card">
-        <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Past Winners</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h2 style={{ fontSize: '1.25rem' }}>Historial de Ganadores</h2>
+          {pastWinners.length > 0 && (
+            <button 
+              className="btn" 
+              style={{ borderColor: 'var(--danger)', color: 'var(--danger)' }} 
+              onClick={handleClearHistory}
+            >
+              Limpiar Historial
+            </button>
+          )}
+        </div>
+        
         {pastWinners.length > 0 ? (
           <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '0.75rem' }}>Winning No.</th>
-                <th style={{ padding: '0.75rem' }}>Winner Name</th>
-                <th style={{ padding: '0.75rem' }}>Drawn At</th>
+                <th style={{ padding: '0.75rem' }}>Nº Ganador</th>
+                <th style={{ padding: '0.75rem' }}>Propietario</th>
+                <th style={{ padding: '0.75rem' }}>Fecha del Sorteo</th>
               </tr>
             </thead>
             <tbody>
@@ -125,7 +146,7 @@ export default function WinnerDraw() {
             </tbody>
           </table>
         ) : (
-          <p style={{ color: 'var(--text-secondary)' }}>No winners have been drawn yet.</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Aún no se ha declarado ningún ganador.</p>
         )}
       </div>
 
