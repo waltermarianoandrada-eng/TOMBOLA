@@ -1,5 +1,6 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Ticket, Users, Settings, Trophy } from 'lucide-react';
+import { Ticket, Users, Settings, Trophy, Download } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import BuyerManagement from './components/BuyerManagement';
 import RaffleConfigView from './components/RaffleConfigView';
@@ -13,6 +14,32 @@ function Navigation() {
     { path: '/config', label: 'Configuración', icon: Settings },
     { path: '/draw', label: 'Gran Sorteo', icon: Trophy },
   ];
+
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: any) => {
+      // Prevenir que aparezca el prompt automático nativo
+      e.preventDefault();
+      // Guardar el evento para poder llamarlo más tarde con el botón
+      setInstallPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const result = await installPrompt.userChoice;
+    if (result.outcome === 'accepted') {
+      setInstallPrompt(null);
+    }
+  };
 
   return (
     <nav className="sidebar">
@@ -33,6 +60,19 @@ function Navigation() {
             </li>
           );
         })}
+
+        {installPrompt && (
+          <li style={{ marginTop: 'auto', paddingTop: '1rem' }}>
+            <button 
+              onClick={handleInstallClick}
+              className="btn btn-primary"
+              style={{ width: '100%', padding: '0.75rem', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            >
+              <Download size={20} />
+              <span>Instalar App</span>
+            </button>
+          </li>
+        )}
       </ul>
     </nav>
   );
