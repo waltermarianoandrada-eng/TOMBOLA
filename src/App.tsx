@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Ticket, Users, Settings, Trophy } from 'lucide-react';
 import Dashboard from './components/Dashboard';

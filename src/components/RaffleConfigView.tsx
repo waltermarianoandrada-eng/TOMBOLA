@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { storage } from '../services/storage';
 import { engine } from '../services/engine';
 import type { RaffleConfig } from '../types';

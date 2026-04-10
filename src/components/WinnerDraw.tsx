@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Trophy } from 'lucide-react';
 import { storage } from '../services/storage';
 import { engine } from '../services/engine';
@@ -27,7 +27,7 @@ export default function WinnerDraw() {
     setWinner(null);
 
     // Animation: randomly generate numbers for 3 seconds
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     const duration = 4000;
     const start = Date.now();
 
