@@ -111,8 +111,8 @@ export default function RaffleConfigView() {
                 className="input" 
                 value={currency} 
                 onChange={e => setCurrency(e.target.value)} 
-                required 
               />
+            </div>
             <div className="input-group" style={{ gridColumn: '1 / -1' }}>
               <label className="input-label">CBU / Alias (Para transferencias)</label>
               <input 
