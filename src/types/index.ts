@@ -19,6 +19,7 @@ export interface RaffleConfig {
   totalNumbers: number;
   pricePerNumber: number;
   currency: string;
+  cbuAlias?: string;
 }
 
 export interface Winner {

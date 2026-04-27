@@ -11,6 +11,7 @@ export default function RaffleConfigView() {
   const [totalNumbers, setTotalNumbers] = useState(100);
   const [pricePerNumber, setPricePerNumber] = useState(1000);
   const [currency, setCurrency] = useState('Pesos Argentinos');
+  const [cbuAlias, setCbuAlias] = useState('');
 
   useEffect(() => {
     const loadedConfig = storage.getConfig();
@@ -20,6 +21,7 @@ export default function RaffleConfigView() {
       setTotalNumbers(loadedConfig.totalNumbers);
       setPricePerNumber(loadedConfig.pricePerNumber);
       setCurrency(loadedConfig.currency);
+      setCbuAlias(loadedConfig.cbuAlias || '');
     }
   }, []);
 
@@ -39,7 +41,8 @@ export default function RaffleConfigView() {
       name,
       totalNumbers,
       pricePerNumber,
-      currency
+      currency,
+      cbuAlias
     };
     
     storage.setConfig(newConfig);
@@ -109,6 +112,15 @@ export default function RaffleConfigView() {
                 value={currency} 
                 onChange={e => setCurrency(e.target.value)} 
                 required 
+              />
+            <div className="input-group" style={{ gridColumn: '1 / -1' }}>
+              <label className="input-label">CBU / Alias (Para transferencias)</label>
+              <input 
+                type="text" 
+                className="input" 
+                value={cbuAlias} 
+                onChange={e => setCbuAlias(e.target.value)} 
+                placeholder="Ej. mi.alias.mp" 
               />
             </div>
           </div>
