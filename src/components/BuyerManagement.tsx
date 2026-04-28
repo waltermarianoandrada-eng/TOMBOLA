@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { storage } from '../services/storage';
 import { engine } from '../services/engine';
 import type { Buyer, Ticket } from '../types';
 
 export default function BuyerManagement() {
+  const location = useLocation();
   const [buyers, setBuyers] = useState<Record<string, Buyer>>({});
   const [tickets, setTickets] = useState<Ticket[]>([]);
   
@@ -19,7 +21,11 @@ export default function BuyerManagement() {
   useEffect(() => {
     setBuyers(storage.getBuyers());
     setTickets(storage.getTickets());
-  }, []);
+    
+    if (location.state?.selectedTicketNumber) {
+      setTicketNumber(location.state.selectedTicketNumber.toString());
+    }
+  }, [location.state]);
 
   const handleAddBuyer = (e: React.FormEvent) => {
     e.preventDefault();

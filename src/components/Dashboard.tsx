@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { storage } from '../services/storage';
 import { engine } from '../services/engine';
 import type { Ticket, RaffleConfig, Buyer } from '../types';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [config, setConfig] = useState<RaffleConfig | null>(null);
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [buyers, setBuyers] = useState<Record<string, Buyer>>({});
@@ -105,6 +107,8 @@ export default function Dashboard() {
               key={ticket.number}
               className={`raffle-number status-${ticket.status}`}
               title={ticket.buyerId ? `Comprador: ${buyers[ticket.buyerId]?.name}` : 'Disponible'}
+              onClick={() => navigate('/buyers', { state: { selectedTicketNumber: ticket.number } })}
+              style={{ cursor: 'pointer' }}
             >
               {ticket.number}
             </div>
